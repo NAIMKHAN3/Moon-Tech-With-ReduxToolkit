@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggle, toggleBrand } from '../app/features/Filter/filterSlice';
+import { getProducts } from '../app/features/Products/productSlice';
 import ProductCard from '../components/ProductCard';
 
 const Home = () => {
-    const [products, setProducts] = useState([])
+    // const [products, setProducts] = useState([])
     const dispatch = useDispatch();
     const filter = useSelector(state => state.filter)
+    const { products } = useSelector(state => state.products)
     const { status, brand } = filter;
 
 
     useEffect(() => {
-        fetch("https://moon-tech-server-pied.vercel.app/products")
-            .then(res => res.json())
-            .then(data => setProducts(data))
+        // fetch("https://moon-tech-server-pied.vercel.app/products")
+        //     .then(res => res.json())
+        //     .then(data => setProducts(data))
+        dispatch(getProducts())
     }, [])
     const activeClass = 'bg-indigo-500 text-white border-white';
 
