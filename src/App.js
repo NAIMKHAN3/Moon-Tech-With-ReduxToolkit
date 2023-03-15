@@ -9,8 +9,10 @@ function App() {
 
   return (
     <div className="App">
-      <Provider store={store}></Provider>
-      <RouterProvider router={router}></RouterProvider>
+      <Provider store={store}>
+        <RouterProvider router={router}></RouterProvider>
+      </Provider>
+
     </div>
   );
 }
