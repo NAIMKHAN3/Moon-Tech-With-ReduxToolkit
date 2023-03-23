@@ -1,28 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProducts, removeProduct, toggleDeleteSuccess } from '../app/features/Products/productSlice';
 
 
 const ProductList = () => {
-    const { products, deleteLoading, isError, deleteSuccess } = useSelector(state => state.products)
+    const [products, setProducts] = useState([])
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getProducts())
-    }, [dispatch])
+        fetch("https://moon-tech-server-pied.vercel.app/products")
+            .then(res => res.json())
+            .then(data => setProducts(data))
+    }, [])
 
-    useEffect(() => {
-        if (deleteLoading) {
-            toast.loading('Deleting....', { id: removeProduct })
-        }
-        if (!deleteLoading && deleteSuccess) {
-            toast.success("Delete Successfully", { id: removeProduct })
-            dispatch(toggleDeleteSuccess())
-        }
-        if (isError && !deleteSuccess && !deleteLoading) {
-            toast.error("Product Not deleted", { id: removeProduct })
-        }
-    }, [isError, deleteLoading, deleteSuccess, toggleDeleteSuccess])
 
     return (
         <div class='flex flex-col justify-center items-center h-full w-full '>
@@ -83,7 +72,7 @@ const ProductList = () => {
                                     <td class='p-2'>
                                         <div class='flex justify-center'>
                                             <button
-                                                onClick={() => dispatch(removeProduct(_id))}
+
                                             >
                                                 <svg
                                                     class='w-8 h-8 hover:text-red-500 rounded-full hover:bg-gray-100 p-1'

@@ -1,45 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggle, toggleBrand } from '../app/features/Filter/filterSlice';
-import { getProducts } from '../app/features/Products/productSlice';
 import ProductCard from '../components/ProductCard';
 
 const Home = () => {
+    const [products, setProducts] = useState([])
     const dispatch = useDispatch();
     const filter = useSelector(state => state.filter);
-    const { products, isLoading } = useSelector(state => state.products);
-    const { status, brand } = filter;
 
 
     useEffect(() => {
-        dispatch(getProducts())
-    }, [dispatch])
+        fetch("https://moon-tech-server-pied.vercel.app/products")
+            .then(res => res.json())
+            .then(data => setProducts(data))
+    }, [])
     const activeClass = 'bg-indigo-500 text-white border-white';
-
-    let content;
-
-    if (isLoading) {
-        content = <div className='text-center text-4xl font-semibold flex justify-center items-center'>Loading....</div>
-    }
-
-    if (products.length) {
-        content = products.map(product => <ProductCard key={product._id} product={product}></ProductCard>)
-    }
-    if (products.length && (status || brand.length)) {
-        content = products.filter(product => {
-            if (status) {
-                return product.status === true;
-            }
-            return product;
-        })
-            .filter(product => {
-                if (brand.length) {
-                    return brand.includes(product.brand)
-                }
-                return product;
-            })
-            .map(product => <ProductCard key={product._id} product={product}></ProductCard>)
-    }
 
 
     return (
@@ -57,7 +32,7 @@ const Home = () => {
             </div>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-14'>
                 {
-                    content
+                    products.map(product => <ProductCard key={product._id} product={product}></ProductCard>)
                 }
             </div>
 
