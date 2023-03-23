@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import Deshboard from "../Layout/Deshboard/Deshboard";
 import Main from "../Layout/Main/Main";
 import About from "../Pages/About";
 import Card from "../Pages/Card";
@@ -21,5 +22,8 @@ export const router = createBrowserRouter([
                 path: '/card', element: <Card></Card>
             }
         ]
+    },
+    {
+        path: '/deshboard', element: <Deshboard />
     }
 ])

@@ -5,22 +5,22 @@ import { getProducts } from '../app/features/Products/productSlice';
 import ProductCard from '../components/ProductCard';
 
 const Home = () => {
-    // const [products, setProducts] = useState([])
     const dispatch = useDispatch();
-    const filter = useSelector(state => state.filter)
-    const { products } = useSelector(state => state.products)
+    const filter = useSelector(state => state.filter);
+    const { products, isLoading } = useSelector(state => state.products);
     const { status, brand } = filter;
 
 
     useEffect(() => {
-        // fetch("https://moon-tech-server-pied.vercel.app/products")
-        //     .then(res => res.json())
-        //     .then(data => setProducts(data))
         dispatch(getProducts())
-    }, [])
+    }, [dispatch])
     const activeClass = 'bg-indigo-500 text-white border-white';
 
     let content;
+
+    if (isLoading) {
+        content = <div className='text-center text-4xl font-semibold flex justify-center items-center'>Loading....</div>
+    }
 
     if (products.length) {
         content = products.map(product => <ProductCard key={product._id} product={product}></ProductCard>)
