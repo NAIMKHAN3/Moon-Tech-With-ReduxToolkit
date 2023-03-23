@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
+import { useGetProductsQuery, useRemoveProductMutation } from '../app/features/api/productApi';
 
 
 const ProductList = () => {
-    const [products, setProducts] = useState([])
-    const dispatch = useDispatch();
-    useEffect(() => {
-        fetch("https://moon-tech-server-pied.vercel.app/products")
-            .then(res => res.json())
-            .then(data => setProducts(data))
-    }, [])
+    const { data, isLoading } = useGetProductsQuery()
+    const [removeProduct] = useRemoveProductMutation();
+    const products = data;
+
+
+    if (isLoading) {
+        return <>Loading...</>
+    }
+
 
 
     return (
@@ -72,7 +75,7 @@ const ProductList = () => {
                                     <td class='p-2'>
                                         <div class='flex justify-center'>
                                             <button
-
+                                                onClick={() => removeProduct(_id)}
                                             >
                                                 <svg
                                                     class='w-8 h-8 hover:text-red-500 rounded-full hover:bg-gray-100 p-1'

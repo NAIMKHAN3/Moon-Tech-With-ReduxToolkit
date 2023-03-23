@@ -2,11 +2,20 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
+import { useAddProductMutation } from '../app/features/api/productApi';
 const AddProduct = () => {
     const { register, handleSubmit, reset } = useForm();
-    const dispatch = useDispatch();
+    const [postProduct, { isLoading, isSuccess }] = useAddProductMutation();
 
-
+    useEffect(() => {
+        if (isLoading) {
+            toast.loading("Posting", { id: "addProduct" })
+        }
+        if (!isLoading && isSuccess) {
+            toast.success("Added a Product", { id: "addProduct" })
+            reset()
+        }
+    }, [isLoading, isSuccess, reset]);
     const submit = (data) => {
         const product = {
             model: data.model,
@@ -21,6 +30,7 @@ const AddProduct = () => {
             ],
             spec: [],
         };
+        postProduct(product)
     };
 
 

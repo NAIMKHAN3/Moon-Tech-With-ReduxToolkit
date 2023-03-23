@@ -7,10 +7,13 @@ import ProductCard from '../components/ProductCard';
 const Home = () => {
     const dispatch = useDispatch();
     const filter = useSelector(state => state.filter);
-    const { isLoading, data } = useGetProductsQuery();
+    const { isLoading, data, isError } = useGetProductsQuery();
     const products = data;
     if (isLoading) {
         return <>Loading....</>
+    }
+    if (isError) {
+        return <>Something went rong</>
     }
 
     const activeClass = 'bg-indigo-500 text-white border-white';
