@@ -10,3 +10,8 @@ export const postProducts = async (product) => {
     return data.data;
 
 }
+export const deleteProducts = async (id) => {
+    const data = await axios.delete(`/deleteproduct/${id}`);
+    return data.data;
+
+}

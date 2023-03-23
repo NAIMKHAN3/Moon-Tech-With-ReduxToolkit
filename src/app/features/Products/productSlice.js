@@ -1,11 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { fetchProducts, postProducts } from "../../../utility/fetchApi";
+import { deleteProducts, fetchProducts, postProducts } from "../../../utility/fetchApi";
 
 const initialState = {
     products: [],
     isLoading: false,
     isError: false,
     postSuccess: false,
+    deleteSuccess: false,
+    deleteLoading: false,
 }
 
 export const getProducts = createAsyncThunk("products/getProducts", async () => {
@@ -16,6 +18,11 @@ export const addProduct = createAsyncThunk("products/addProduct", async (product
     const data = postProducts(product)
     return data;
 })
+export const removeProduct = createAsyncThunk("products/removeProduct", async (id, thunkAPI) => {
+    const data = await deleteProducts(id)
+    thunkAPI.dispatch(removeFromState(id))
+    return data;
+})
 
 
 const productSlice = createSlice({
@@ -24,6 +31,12 @@ const productSlice = createSlice({
     reducers: {
         togglePostSuccess: (state, action) => {
             state.postSuccess = false;
+        },
+        toggleDeleteSuccess: (state, action) => {
+            state.deleteSuccess = false;
+        },
+        removeFromState: (state, action) => {
+            state.products = state.products.filter(product => product._id !== action.payload)
         }
     },
     extraReducers: (builder) => {
@@ -54,7 +67,20 @@ const productSlice = createSlice({
             state.postSuccess = false;
             state.isError = true;
         })
+        builder.addCase(removeProduct.pending, (state, action) => {
+            state.deleteLoading = true;
+            state.deleteSuccess = false
+        })
+        builder.addCase(removeProduct.fulfilled, (state, action) => {
+            state.deleteLoading = false;
+            state.deleteSuccess = true;
+        })
+        builder.addCase(removeProduct.rejected, (state, action) => {
+            state.deleteLoading = false;
+            state.deleteSuccess = false;
+            state.isError = true;
+        })
     }
 })
-export const { togglePostSuccess } = productSlice.actions;
+export const { togglePostSuccess, removeFromState, toggleDeleteSuccess } = productSlice.actions;
 export default productSlice.reducer;
