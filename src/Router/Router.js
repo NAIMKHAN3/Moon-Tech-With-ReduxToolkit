@@ -3,6 +3,8 @@ import Deshboard from "../Layout/Deshboard/Deshboard";
 import Main from "../Layout/Main/Main";
 import About from "../Pages/About";
 import Card from "../Pages/Card";
+import AddProduct from "../Pages/DeshboardPage/AddProduct";
+import ProductList from "../Pages/DeshboardPage/ProductList";
 import Home from "../Pages/Home";
 import TopRated from "../Pages/TopRated";
 
@@ -24,6 +26,13 @@ export const router = createBrowserRouter([
         ]
     },
     {
-        path: '/deshboard', element: <Deshboard />
+        path: '/deshboard', element: <Deshboard />, children: [
+            {
+                path: '/deshboard/product-list', element: <ProductList />
+            },
+            {
+                path: '/deshboard/add-product', element: <AddProduct />
+            }
+        ]
     }
 ])
