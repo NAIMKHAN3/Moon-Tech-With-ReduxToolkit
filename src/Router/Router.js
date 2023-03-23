@@ -2,10 +2,10 @@ import { createBrowserRouter } from "react-router-dom";
 import Deshboard from "../Layout/Deshboard/Deshboard";
 import Main from "../Layout/Main/Main";
 import About from "../Pages/About";
+import AddProduct from "../Pages/AddProduct";
 import Card from "../Pages/Card";
-import AddProduct from "../Pages/DeshboardPage/AddProduct";
-import ProductList from "../Pages/DeshboardPage/ProductList";
 import Home from "../Pages/Home";
+import ProductList from "../Pages/ProductList";
 import TopRated from "../Pages/TopRated";
 
 export const router = createBrowserRouter([

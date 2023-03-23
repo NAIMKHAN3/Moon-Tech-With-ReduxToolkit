@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
+import { addProduct, togglePostSuccess } from '../app/features/Products/productSlice';
 
 const AddProduct = () => {
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, reset } = useForm();
+    const dispatch = useDispatch();
+    const { isLoading, isError, postSuccess } = useSelector(state => state.products)
 
     const submit = (data) => {
         const product = {
@@ -18,7 +23,23 @@ const AddProduct = () => {
             ],
             spec: [],
         };
+        dispatch(addProduct(product))
     };
+
+    useEffect(() => {
+        if (!isLoading && postSuccess) {
+            toast.success("Added a Product", { id: addProduct })
+            reset()
+            dispatch(togglePostSuccess())
+        }
+        if (isLoading && !postSuccess) {
+            toast.loading("Posting...", { id: addProduct })
+        }
+        if (!postSuccess && isError) {
+            toast.error("Product Not a Added", { id: addProduct })
+        }
+    }, [isError, isLoading, postSuccess, togglePostSuccess])
+
     return (
         <div className='flex justify-center items-center h-full '>
             <form
